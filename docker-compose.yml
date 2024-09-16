@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    ports:
+      - "8080:80"
+    volumes:
+      - nextcloud_data:/var/www/html
+    environment:
+      MYSQL_PASSWORD: your_mysql_password
+      MYSQL_HOST: db
+    depends_on:
+      - db
+    networks:
+      - nextcloud_network
+
+  db:
+    image: mysql:5.7
+    container_name: nextcloud_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_PASSWORD: your_mysql_password
+      MYSQL_DATABASE: nextcloud
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - nextcloud_network
+
+volumes:
+  nextcloud_data:
+  db_data:
+
+networks:
+  nextcloud_network:
